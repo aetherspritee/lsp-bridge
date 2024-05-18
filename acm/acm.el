@@ -124,11 +124,11 @@
 (defcustom acm-continue-commands
   ;; nil is undefined command
   '(nil ignore universal-argument universal-argument-more digit-argument
-        self-insert-command org-self-insert-command
-        ;; Avoid flashing completion menu when backward delete char
-        grammatical-edit-backward-delete backward-delete-char-untabify
-        python-indent-dedent-line-backspace delete-backward-char hungry-delete-backward
-        "\\`acm-" "\\`scroll-other-window" "\\`special-lispy-" "\\`special-" "\\`lispy-")
+    self-insert-command org-self-insert-command
+    ;; Avoid flashing completion menu when backward delete char
+    grammatical-edit-backward-delete backward-delete-char-untabify
+    python-indent-dedent-line-backspace delete-backward-char hungry-delete-backward
+    "\\`acm-" "\\`scroll-other-window" "\\`special-lispy-" "\\`special-" "\\`lispy-")
   "Continue ACM completion after executing these commands."
   :type '(repeat (choice regexp symbol))
   :group 'acm)
@@ -141,8 +141,8 @@
 (defcustom acm-enable-doc-markdown-render 'async
   "Popup documentation automatically when this option is turn on."
   :type '(choice (const :tag "Asynchronous" async)
-                 (const :tag "Enabled" t)
-                 (const :tag "Disabled" nil))
+          (const :tag "Enabled" t)
+          (const :tag "Disabled" nil))
   :group 'acm)
 
 (defcustom acm-enable-icon t
@@ -228,8 +228,8 @@
     (define-key map [remap previous-line] #'acm-select-prev)
     (define-key map [down] #'acm-select-next)
     (define-key map [up] #'acm-select-prev)
-    (define-key map "\M-n" #'acm-select-next)
-    (define-key map "\M-p" #'acm-select-prev)
+    (define-key map "\M-j" #'acm-select-next)
+    (define-key map "\M-k" #'acm-select-prev)
     (define-key map "\M-," #'acm-select-last)
     (define-key map "\M-." #'acm-select-first)
     (define-key map "\C-v" #'acm-select-next-page)
@@ -242,8 +242,8 @@
     (define-key map "\M-H" #'acm-insert-common)
     (define-key map "\M-u" #'acm-filter)
     (define-key map "\M-d" #'acm-doc-toggle)
-    (define-key map "\M-j" #'acm-doc-scroll-up)
-    (define-key map "\M-k" #'acm-doc-scroll-down)
+    (define-key map "\M-p" #'acm-doc-scroll-up)
+    (define-key map "\M-n" #'acm-doc-scroll-down)
     (define-key map "\M-l" #'acm-hide)
     (define-key map "\C-g" #'acm-hide)
     (define-key map "1" #'acm-insert-number-or-complete-candiate)
@@ -383,7 +383,7 @@ So we use `minor-mode-overriding-map-alist' to override key, make sure all keys 
     ("org-roam"
      (when (org-in-regexp org-roam-bracket-completion-re 1)
        (cons (match-beginning 2)
-	         (match-end 2))))
+	     (match-end 2))))
     ("string"
      (cons (point)
            (save-excursion
@@ -402,9 +402,9 @@ So we use `minor-mode-overriding-map-alist' to override key, make sure all keys 
 (defun acm-get-input-prefix ()
   "Get user input prefix."
   (let* ((acm-input-bound-style (if (acm-in-roam-bracket-p)
-				                    "org-roam"
-				                  "ascii"))
-	     (bound (acm-get-input-prefix-bound)))
+				    "org-roam"
+				  "ascii"))
+	 (bound (acm-get-input-prefix-bound)))
     (if bound
         (buffer-substring-no-properties (car bound) (cdr bound))
       "")))
@@ -524,7 +524,7 @@ Only calculate template candidate when type last character."
                                           ("jupyter-candidates" jupyter-candidates)
                                           ("ctags-candidates" ctags-candidates)
                                           ("citre-candidates" citre-candidates)
-			                              ("org-roam-candidates" org-roam-candidates)
+			                  ("org-roam-candidates" org-roam-candidates)
                                           ("file-words-candidates" (acm-backend-search-file-words-candidates keyword))
                                           ("telega-candidates" (acm-backend-telega-candidates keyword))
                                           ))
@@ -620,10 +620,10 @@ The key of candidate will change between two LSP results."
          (candidates (or candidate (acm-update-candidates)))
          (menu-candidates (cl-subseq candidates 0 (min (length candidates) acm-menu-length)))
          (current-select-candidate-index (cl-position previous-select-candidate (mapcar 'acm-menu-index-info menu-candidates) :test 'equal))
-	     (acm-input-bound-style (if (acm-in-roam-bracket-p)
-				                    "org-roam"
-				                  "ascii"))
-	     (bounds (acm-get-input-prefix-bound)))
+	 (acm-input-bound-style (if (acm-in-roam-bracket-p)
+				    "org-roam"
+				  "ascii"))
+	 (bounds (acm-get-input-prefix-bound)))
     (cond
      ;; Hide completion menu if user type first candidate completely, except when candidate annotation is `emmet' or `snippet'.
      ((and (equal (length candidates) 1)
@@ -1322,8 +1322,8 @@ The key of candidate will change between two LSP results."
 
 ;; Emacs 28: Do not show Acm commands with M-X
 (dolist (sym '(acm-hide acm-complete acm-select-first acm-select-last acm-select-next
-                        acm-select-prev acm-insert-common acm-doc-scroll-up acm-doc-scroll-down
-                        acm-complete-quick-access acm-doc-toggle))
+               acm-select-prev acm-insert-common acm-doc-scroll-up acm-doc-scroll-down
+               acm-complete-quick-access acm-doc-toggle))
   (put sym 'completion-predicate #'ignore))
 
 (provide 'acm)
